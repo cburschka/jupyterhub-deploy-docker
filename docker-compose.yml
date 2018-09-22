@@ -35,9 +35,12 @@ services:
       # Bind Docker volume on host for JupyterHub database and cookie secrets
       - "data:${DATA_VOLUME_CONTAINER}"
     ports:
-      - "443:443"
+      - "8888:8888"
     links:
       - hub-db
+    networks:
+      - webproxy
+      - default
     environment:
       # All containers will join this network
       - DOCKER_NETWORK_NAME=${DOCKER_NETWORK_NAME}
@@ -50,6 +53,10 @@ services:
       # Postgres db info
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST=hub-db
+      - VIRTUAL_HOST=jupyter.burschka.de
+      - VIRTUAL_PORT=8888
+      - LETSENCRYPT_HOST=jupyter.burschka.de
+      - LETSENCRYPT_EMAIL=christoph@burschka.de
     env_file:
       - secrets/postgres.env
       - secrets/oauth.env
@@ -68,3 +75,6 @@ networks:
   default:
     external:
       name: ${DOCKER_NETWORK_NAME}
+  webproxy:
+    external:
+      name: webproxy
