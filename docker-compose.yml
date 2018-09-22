@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # JupyterHub docker-compose configuration file
-version: "2"
+version: "3"
 
 services:
   hub-db:
@@ -10,8 +10,8 @@ services:
     container_name: jupyterhub-db
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      PGDATA: ${DB_VOLUME_CONTAINER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=${DB_VOLUME_CONTAINER}
     env_file:
       - secrets/postgres.env
     volumes:
@@ -40,16 +40,16 @@ services:
       - hub-db
     environment:
       # All containers will join this network
-      DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
+      - DOCKER_NETWORK_NAME=${DOCKER_NETWORK_NAME}
       # JupyterHub will spawn this Notebook image for users
-      DOCKER_NOTEBOOK_IMAGE: ${LOCAL_NOTEBOOK_IMAGE}
+      - DOCKER_NOTEBOOK_IMAGE=${LOCAL_NOTEBOOK_IMAGE}
       # Notebook directory inside user image
-      DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
+      - DOCKER_NOTEBOOK_DIR=${DOCKER_NOTEBOOK_DIR}
       # Using this run command (optional)
-      DOCKER_SPAWN_CMD: ${DOCKER_SPAWN_CMD}
+      - DOCKER_SPAWN_CMD=${DOCKER_SPAWN_CMD}
       # Postgres db info
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: hub-db
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=hub-db
     env_file:
       - secrets/postgres.env
       - secrets/oauth.env
