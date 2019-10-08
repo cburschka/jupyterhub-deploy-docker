@@ -57,6 +57,7 @@ services:
       - VIRTUAL_PORT=8888
       - LETSENCRYPT_HOST=jupyter.burschka.de
       - LETSENCRYPT_EMAIL=christoph@burschka.de
+      - GRANT_SUDO=yes
     env_file:
       - secrets/postgres.env
       - secrets/oauth.env
